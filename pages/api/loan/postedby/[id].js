@@ -22,7 +22,6 @@ export default async function handler(req, res) {
 
       responseHandler(loansByUser, res)
     } catch (error) {
-      console.log(error)
       errorHandler(error, res)
     }
   } else {

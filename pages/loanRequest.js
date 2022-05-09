@@ -34,7 +34,6 @@ function LoanRequest() {
     if (loanRequest.hasError) {
       setErrorMessage(loanRequest.errorMessage)
     } else {
-      console.log(loanRequest)
       setErrorMessage('')
       setAmount('')
       setTenure('')
@@ -118,19 +117,3 @@ function LoanRequest() {
 
 export default LoanRequest
 
-export async function getServerSideProps(context) {
-  const session = await getSession(context)
-
-  if (!session) {
-    return {
-      redirect: {
-        destination: '/login',
-        permanent: false,
-      },
-    }
-  }
-
-  return {
-    props: { session },
-  }
-}
