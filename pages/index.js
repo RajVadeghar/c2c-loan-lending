@@ -23,7 +23,7 @@ const Home = ({ loans }) => {
             <p className="text-5xl font-thin">No loan requests yet</p>
           </div>
         ) : (
-          <ul className="my-11 mx-auto flex w-full max-w-screen-md flex-col">
+          <ul className="my-5 mx-auto flex w-full max-w-screen-md flex-col">
             {loans.map((loan) => (
               <LoanItem key={loan._id} loan={loan} />
             ))}

@@ -2,6 +2,8 @@ import React, { useState } from 'react'
 import { Tab } from '@headlessui/react'
 import TimeAgo from 'timeago-react'
 import { deleteloan } from '../utils/request'
+import { useSession } from 'next-auth/react'
+import { useSelector } from 'react-redux'
 
 function classNames(...classes) {
   return classes.filter(Boolean).join(' ')
@@ -14,6 +16,10 @@ function UserProfileNavigation({ loans }) {
     'Notifications',
   ])
   const [loading, setLoading] = useState(false)
+  const userDataFromStore = useSelector((state) => state.userState)
+  const user = userDataFromStore?.data
+  const { data: session } = useSession()
+  const loggedInUser = session?.user._id === user?._id
 
   const deleteLoanReq = async (id) => {
     if (loading) return
@@ -51,19 +57,31 @@ function UserProfileNavigation({ loans }) {
             ))}
           </Tab.List>
           <Tab.Panels className="mt-2">
-            <Tab.Panel
-              className={classNames(
-                'rounded-xl bg-white p-3',
-                'ring-white ring-opacity-60 ring-offset-2 ring-offset-blue-400 focus:outline-none focus:ring-2'
-              )}
-            >
+            <Tab.Panel className={'rounded-xl bg-white p-3'}>
               <ul>
                 {loans.data.map(
-                  ({ _id, amount, tenure, interest, postedBy, createdAt }) => (
+                  ({
+                    _id,
+                    amount,
+                    tenure,
+                    interest,
+                    postedBy,
+                    createdAt,
+                    status,
+                  }) => (
                     <li
                       key={_id}
-                      className="flex w-full flex-col gap-y-3 rounded-md bg-white p-6 shadow-md ring-1 ring-black/5"
+                      className="relative flex w-full flex-col gap-y-3 rounded-md bg-white p-6 shadow-md ring-1 ring-black/5"
                     >
+                      {status === 'pending' ? (
+                        <span className="absolute bottom-6 right-6 mr-2 rounded bg-indigo-600 px-2.5 py-0.5 text-xs font-semibold text-white">
+                          pending
+                        </span>
+                      ) : (
+                        <span className="absolute bottom-6 right-6 mr-2 rounded bg-green-600 px-2.5 py-0.5 text-xs font-semibold text-white">
+                          accepted
+                        </span>
+                      )}
                       <div className="flex items-start justify-between">
                         <div className="flex flex-col gap-y-1">
                           <p className="text-sm">
@@ -92,12 +110,47 @@ function UserProfileNavigation({ loans }) {
                       </div>
 
                       <div className="flex space-x-2">
-                        <button
-                          onClick={() => deleteLoanReq(_id)}
-                          className="rounded-md bg-red-500 p-1 px-3 text-sm uppercase text-white transition-all duration-300 hover:bg-white hover:text-red-500 hover:ring-[1.4px] hover:ring-red-500"
-                        >
-                          delete
-                        </button>
+                        {loggedInUser ? (
+                          <button
+                            onClick={() => deleteLoanReq(_id)}
+                            className="rounded-md bg-red-500 p-1 px-3 text-sm uppercase text-white transition-all duration-300 hover:bg-white hover:text-red-500 hover:ring-[1.4px] hover:ring-red-500"
+                          >
+                            delete
+                          </button>
+                        ) : (
+                          status === 'pending' && (
+                            <div className="flex space-x-2">
+                              {!(postedBy.userid === session?.user._id) && (
+                                <button
+                                  onClick={() => acceptLoanRequest(_id)}
+                                  className="rounded-md bg-blue-500 p-1 px-3 text-sm uppercase text-white transition-all duration-300 hover:bg-white hover:text-blue-500 hover:ring-[1.4px] hover:ring-blue-500"
+                                >
+                                  Accept
+                                </button>
+                              )}
+                              {!(postedBy.userid === session?.user._id) && (
+                                <button
+                                  onClick={() => router.push(`/`)}
+                                  className="rounded-md bg-blue-500 p-1 px-3 text-sm uppercase text-white transition-all duration-300 hover:bg-white hover:text-blue-500 hover:ring-[1.4px] hover:ring-blue-500"
+                                >
+                                  Modify
+                                </button>
+                              )}
+                              <button
+                                onClick={() =>
+                                  postedBy.userid === session?.user._id
+                                    ? deleteLoan(_id)
+                                    : rejectLoan()
+                                }
+                                className="rounded-md bg-red-500 p-1 px-3 text-sm uppercase text-white transition-all duration-300 hover:bg-white hover:text-red-500 hover:ring-[1.4px] hover:ring-red-500"
+                              >
+                                {postedBy.userid === session?.user._id
+                                  ? 'Delete'
+                                  : 'Reject'}
+                              </button>
+                            </div>
+                          )
+                        )}
                       </div>
                     </li>
                   )

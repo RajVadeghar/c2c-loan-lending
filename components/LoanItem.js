@@ -68,7 +68,7 @@ function LoanItem({ loan }) {
   }
 
   return (
-    <li className="relative flex w-full flex-col gap-y-3 rounded-md bg-white p-6 shadow-md ring-1 ring-black/5">
+    <li className="relative my-2 flex w-full flex-col gap-y-3 rounded-md bg-white p-6 shadow-md ring-1 ring-black/5">
       {status === 'pending' ? (
         <span className="absolute bottom-6 right-6 mr-2 rounded bg-indigo-600 px-2.5 py-0.5 text-xs font-semibold text-white">
           pending
@@ -82,7 +82,10 @@ function LoanItem({ loan }) {
       <div className="flex items-start justify-between">
         <div className="flex flex-col">
           <p className="text-2xl font-light">Loan Request made by:</p>{' '}
-          <p className="text-sm font-semibold capitalize leading-6 text-slate-900">
+          <p
+            onClick={() => router.push(`/${postedBy.userid}`)}
+            className="link text-sm font-semibold capitalize leading-6 text-slate-900"
+          >
             {postedBy.username}
           </p>
         </div>
@@ -112,34 +115,36 @@ function LoanItem({ loan }) {
         </p>
       </div>
 
-      <div className="flex space-x-2">
-        {!(postedBy.userid === session?.user._id) && (
+      {status === 'pending' && (
+        <div className="flex space-x-2">
+          {!(postedBy.userid === session?.user._id) && (
+            <button
+              onClick={() => acceptLoanRequest(_id)}
+              className="rounded-md bg-blue-500 p-1 px-3 text-sm uppercase text-white transition-all duration-300 hover:bg-white hover:text-blue-500 hover:ring-[1.4px] hover:ring-blue-500"
+            >
+              Accept
+            </button>
+          )}
+          {!(postedBy.userid === session?.user._id) && (
+            <button
+              onClick={() => router.push(`/`)}
+              className="rounded-md bg-blue-500 p-1 px-3 text-sm uppercase text-white transition-all duration-300 hover:bg-white hover:text-blue-500 hover:ring-[1.4px] hover:ring-blue-500"
+            >
+              Modify
+            </button>
+          )}
           <button
-            onClick={() => acceptLoanRequest(_id)}
-            className="rounded-md bg-blue-500 p-1 px-3 text-sm uppercase text-white transition-all duration-300 hover:bg-white hover:text-blue-500 hover:ring-[1.4px] hover:ring-blue-500"
+            onClick={() =>
+              postedBy.userid === session?.user._id
+                ? deleteLoan(_id)
+                : rejectLoan()
+            }
+            className="rounded-md bg-red-500 p-1 px-3 text-sm uppercase text-white transition-all duration-300 hover:bg-white hover:text-red-500 hover:ring-[1.4px] hover:ring-red-500"
           >
-            Accept
+            {postedBy.userid === session?.user._id ? 'Delete' : 'Reject'}
           </button>
-        )}
-        {!(postedBy.userid === session?.user._id) && (
-          <button
-            onClick={() => router.push(`/`)}
-            className="rounded-md bg-blue-500 p-1 px-3 text-sm uppercase text-white transition-all duration-300 hover:bg-white hover:text-blue-500 hover:ring-[1.4px] hover:ring-blue-500"
-          >
-            Modify
-          </button>
-        )}
-        <button
-          onClick={() =>
-            postedBy.userid === session?.user._id
-              ? deleteLoan(_id)
-              : rejectLoan()
-          }
-          className="rounded-md bg-red-500 p-1 px-3 text-sm uppercase text-white transition-all duration-300 hover:bg-white hover:text-red-500 hover:ring-[1.4px] hover:ring-red-500"
-        >
-          {postedBy.userid === session?.user._id ? 'Delete' : 'Reject'}
-        </button>
-      </div>
+        </div>
+      )}
     </li>
   )
 }

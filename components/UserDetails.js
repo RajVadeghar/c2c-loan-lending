@@ -72,91 +72,97 @@ function UserDetails({ loans }) {
 
       {isOpen && (
         <section className="relative my-8 mx-auto flex w-full animate-slide-up flex-col gap-y-3 shadow-sm transition-all">
-          <details
-            className="w-full rounded-lg open:bg-white open:p-6 open:shadow-lg open:ring-1 open:ring-black/5"
-            open
-          >
-            <summary className="cursor-pointer select-none text-sm font-semibold capitalize leading-6 text-slate-900">
-              Aadhar Card
-            </summary>
-            <div className="mt-3 flex items-start justify-between gap-x-4 text-sm leading-6 text-slate-600">
-              <div
-                onClick={() => window.open(user.aadhar)}
-                className="group relative col-span-1 aspect-square w-full cursor-pointer overflow-hidden rounded-lg border-2 shadow-md"
-              >
-                <div className="absolute inset-0 hidden bg-black/10 group-hover:block" />
-                <div className="absolute inset-0 hidden place-items-center bg-black/60 group-hover:grid">
-                  <p className="z-10 text-3xl font-light capitalize text-white">
-                    Open in new tab
-                  </p>
-                </div>
-                <img
-                  className="h-full w-full object-cover object-center"
-                  src={user.aadhar}
-                  alt=""
-                />
-              </div>
-            </div>
-          </details>
-
-          <details
-            className="w-full rounded-lg open:bg-white open:p-6 open:shadow-lg open:ring-1 open:ring-black/5"
-            open
-          >
-            <summary className="cursor-pointer select-none text-sm font-semibold capitalize leading-6 text-slate-900">
-              Pan Card
-            </summary>
-            <div className="mt-3 flex items-start justify-between gap-x-4 text-sm leading-6 text-slate-600">
-              <div
-                onClick={() => window.open(user.pan)}
-                className="group relative col-span-1 aspect-square w-full cursor-pointer overflow-hidden rounded-lg border-2 shadow-md"
-              >
-                <div className="absolute inset-0 hidden bg-black/10 group-hover:block" />
-                <div className="absolute inset-0 hidden place-items-center bg-black/60 group-hover:grid">
-                  <p className="z-10 text-3xl font-light capitalize text-white">
-                    Open in new tab
-                  </p>
-                </div>
-                <img
-                  className="h-full w-full object-cover object-center"
-                  src={user.pan}
-                  alt=""
-                />
-              </div>
-            </div>
-          </details>
-
-          <details
-            className="w-full rounded-lg open:bg-white open:p-6 open:shadow-lg open:ring-1 open:ring-black/5"
-            open
-          >
-            <summary className="cursor-pointer select-none text-sm font-semibold capitalize leading-6 text-slate-900">
-              Salary Slips
-            </summary>
-            <div className="mt-3 flex items-start justify-between gap-x-4 text-sm leading-6 text-slate-600">
-              <div className="grid grid-cols-3 gap-3">
-                {Array.apply(null, new Array(3)).map((i) => (
-                  <div
-                    key={i}
-                    onClick={() => window.open(user.pan)}
-                    className="group relative col-span-1 aspect-square w-full cursor-pointer overflow-hidden rounded-lg border-2 shadow-md"
-                  >
-                    <div className="absolute inset-0 hidden bg-black/10 group-hover:block" />
-                    <div className="absolute inset-0 hidden place-items-center bg-black/60 group-hover:grid">
-                      <p className="z-10 text-sm font-light capitalize text-white">
-                        Open in new tab
-                      </p>
-                    </div>
-                    <img
-                      className="h-full w-full object-cover object-center"
-                      src={user.aadhar}
-                      alt=""
-                    />
+          {user.aadhar && (
+            <details
+              className="w-full rounded-lg open:bg-white open:p-6 open:shadow-lg open:ring-1 open:ring-black/5"
+              open
+            >
+              <summary className="cursor-pointer select-none text-sm font-semibold capitalize leading-6 text-slate-900">
+                Aadhar Card
+              </summary>
+              <div className="mt-3 flex items-start justify-between gap-x-4 text-sm leading-6 text-slate-600">
+                <div
+                  onClick={() => window.open(user.aadhar)}
+                  className="group relative col-span-1 aspect-square w-full cursor-pointer overflow-hidden rounded-lg border-2 shadow-md"
+                >
+                  <div className="absolute inset-0 hidden bg-black/10 group-hover:block" />
+                  <div className="absolute inset-0 hidden place-items-center bg-black/60 group-hover:grid">
+                    <p className="z-10 text-3xl font-light capitalize text-white">
+                      Open in new tab
+                    </p>
                   </div>
-                ))}
+                  <img
+                    className="h-full w-full object-cover object-center"
+                    src={user.aadhar}
+                    alt=""
+                  />
+                </div>
               </div>
-            </div>
-          </details>
+            </details>
+          )}
+
+          {user.pan && (
+            <details
+              className="w-full rounded-lg open:bg-white open:p-6 open:shadow-lg open:ring-1 open:ring-black/5"
+              open
+            >
+              <summary className="cursor-pointer select-none text-sm font-semibold capitalize leading-6 text-slate-900">
+                Pan Card
+              </summary>
+              <div className="mt-3 flex items-start justify-between gap-x-4 text-sm leading-6 text-slate-600">
+                <div
+                  onClick={() => window.open(user.pan)}
+                  className="group relative col-span-1 aspect-square w-full cursor-pointer overflow-hidden rounded-lg border-2 shadow-md"
+                >
+                  <div className="absolute inset-0 hidden bg-black/10 group-hover:block" />
+                  <div className="absolute inset-0 hidden place-items-center bg-black/60 group-hover:grid">
+                    <p className="z-10 text-3xl font-light capitalize text-white">
+                      Open in new tab
+                    </p>
+                  </div>
+                  <img
+                    className="h-full w-full object-cover object-center"
+                    src={user.pan}
+                    alt=""
+                  />
+                </div>
+              </div>
+            </details>
+          )}
+
+          {user.salaryslips.length > 0 && (
+            <details
+              className="w-full rounded-lg open:bg-white open:p-6 open:shadow-lg open:ring-1 open:ring-black/5"
+              open
+            >
+              <summary className="cursor-pointer select-none text-sm font-semibold capitalize leading-6 text-slate-900">
+                Salary Slips
+              </summary>
+              <div className="mt-3 flex items-start justify-between gap-x-4 text-sm leading-6 text-slate-600">
+                <div className="grid grid-cols-3 gap-3">
+                  {Array.apply(null, new Array(3)).map((i) => (
+                    <div
+                      key={i}
+                      onClick={() => window.open(user.pan)}
+                      className="group relative col-span-1 aspect-square w-full cursor-pointer overflow-hidden rounded-lg border-2 shadow-md"
+                    >
+                      <div className="absolute inset-0 hidden bg-black/10 group-hover:block" />
+                      <div className="absolute inset-0 hidden place-items-center bg-black/60 group-hover:grid">
+                        <p className="z-10 text-sm font-light capitalize text-white">
+                          Open in new tab
+                        </p>
+                      </div>
+                      <img
+                        className="h-full w-full object-cover object-center"
+                        src={user.aadhar}
+                        alt=""
+                      />
+                    </div>
+                  ))}
+                </div>
+              </div>
+            </details>
+          )}
         </section>
       )}
     </div>
