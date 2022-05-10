@@ -128,7 +128,7 @@ function LoanItem({ loan }) {
             onClick={() => router.push(`/${postedBy.userid}`)}
             className="link text-sm font-semibold capitalize leading-6 text-slate-900"
           >
-            {postedBy.username}
+            {postedBy.userid === session.user._id ? 'you' : postedBy.username}
           </p>
         </div>
         <p className="text-xs text-gray-400">

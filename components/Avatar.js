@@ -5,12 +5,15 @@ import { toggle } from '../redux/modalSlice'
 
 function Avatar({ src = null }) {
   const { data: session } = useSession()
+  const userDataFromStore = useSelector((state) => state.userState)
+  const user = userDataFromStore?.data
+  const loggedInUser = session?.user._id === user?._id
 
   const dispatch = useDispatch()
   const isOpen = useSelector((state) => state.modalState.isOpen)
 
   const uploadPhoto = () => {
-    dispatch(toggle())
+    loggedInUser && dispatch(toggle())
   }
 
   return (
@@ -35,7 +38,9 @@ function Avatar({ src = null }) {
       </div> */}
       <div
         onClick={uploadPhoto}
-        className="absolute inset-0 grid place-items-center bg-black/50 opacity-0 group-hover:cursor-pointer group-hover:opacity-100"
+        className={`absolute inset-0 grid place-items-center bg-black/50 opacity-0 ${
+          loggedInUser && 'group-hover:cursor-pointer group-hover:opacity-100'
+        }`}
       >
         <div className="h-16 rounded-full bg-black/10 p-3">
           <CameraIcon className="h-full text-white" />
