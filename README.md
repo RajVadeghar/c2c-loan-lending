@@ -10,22 +10,21 @@ Deploy the example using [Vercel](https://vercel.com?utm_source=github&utm_mediu
 
 ## How to use this
 
-clone this git repository then install dependencies using following command.
+clone this git repository then install dependencies using following command.<br />
 `npm install`
-or, if you're familiar with yarn, use
-
+or, if you're familiar with yarn, use<br />
 `yarn`
 
 to install all the dependencies. <br />
 
 Then create **.env.local** file at top level where package.json is placed.<br />
 Have 4 environment variables. <br />
-NEXTAUTH_SECRET
-NEXTAUTH_URL
-JWT_SECRET
-MONGO_URL
+NEXTAUTH_SECRET<br />
+NEXTAUTH_URL<br />
+JWT_SECRET<br />
+MONGO_URL<br />
 
 <br />
-After everything is set. Use following command to run this project on localhost
-`npm run dev` or
+After everything is set. Use following command to run this project on localhost<br />
+`npm run dev` or<br />
 `yarn dev`
