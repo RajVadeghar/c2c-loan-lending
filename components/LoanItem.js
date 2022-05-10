@@ -21,6 +21,8 @@ function LoanItem({ loan }) {
   const [loading, setLoading] = useState(false)
   const router = useRouter()
 
+  console.log(acceptedBy)
+
   const getUser = async (id) => {
     if (loading) return
     setLoading(true)
@@ -42,7 +44,10 @@ function LoanItem({ loan }) {
 
     const payload = {
       id: _id,
-      acceptedBy: session.user._id,
+      acceptedBy: {
+        userid: session.user._id,
+        username: session.user.username,
+      },
       status: 'Accepted',
     }
 
@@ -106,7 +111,13 @@ function LoanItem({ loan }) {
         </span>
       ) : (
         <span className="absolute bottom-6 right-6 mr-2 rounded bg-green-600 px-2.5 py-0.5 text-xs font-semibold text-white">
-          accepted by {acceptedBy.username}
+          accepted by{' '}
+          <span
+            onClick={() => router.push(`/${acceptedBy.userid}`)}
+            className="link text-white hover:text-pink-600"
+          >
+            {acceptedBy.username}
+          </span>
         </span>
       )}
 

@@ -38,8 +38,8 @@ export default Home
 
 export async function getServerSideProps(context) {
   const loans = await getLoans()
-
+  
   return {
-    props: { loans: loans.data },
+    props: { loans: loans?.data },
   }
 }
