@@ -73,7 +73,8 @@ function Profile({ userData, loans }) {
       setMessage(user.errorMessage)
     } else {
       setLoading(false)
-      router.replace('/')
+      await signOut()
+      router.replace('/login')
     }
     setLoading(false)
   }

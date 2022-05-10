@@ -181,7 +181,8 @@ function LoanItem({ loan }) {
                 ? deleteLoan(_id)
                 : rejectLoan()
             }
-            className="rounded-md bg-red-500 p-1 px-3 text-sm uppercase text-white transition-all duration-300 hover:bg-white hover:text-red-500 hover:ring-[1.4px] hover:ring-red-500"
+            disabled={loading}
+            className="rounded-md bg-red-500 p-1 px-3 text-sm uppercase text-white transition-all duration-300 hover:bg-white hover:text-red-500 hover:ring-[1.4px] hover:ring-red-500 disabled:opacity-50"
           >
             {postedBy.userid === session?.user._id ? 'Delete' : 'Reject'}
           </button>

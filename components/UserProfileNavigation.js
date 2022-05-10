@@ -4,6 +4,7 @@ import TimeAgo from 'timeago-react'
 import { deleteloan } from '../utils/request'
 import { useSession } from 'next-auth/react'
 import { useSelector } from 'react-redux'
+import { useRouter } from 'next/router'
 
 function classNames(...classes) {
   return classes.filter(Boolean).join(' ')
@@ -20,6 +21,7 @@ function UserProfileNavigation({ loans }) {
   const user = userDataFromStore?.data
   const { data: session } = useSession()
   const loggedInUser = session?.user._id === user?._id
+  const router = useRouter()
 
   const deleteLoanReq = async (id) => {
     if (loading) return
@@ -30,7 +32,59 @@ function UserProfileNavigation({ loans }) {
       setMessage(loan.errorMessage)
     } else {
       setLoading(false)
+      router.push(`/${session.user._id}`)
     }
+    setLoading(false)
+  }
+
+  const acceptLoanRequest = async (id) => {
+    if (loading) return
+    setLoading(true)
+
+    const payload = {
+      id: _id,
+      acceptedBy: {
+        userid: session.user._id,
+        username: session.user.username,
+      },
+      status: 'Accepted',
+    }
+
+    const loan = await updateloan(payload)
+
+    if (loan.hasError) {
+      setMessage(loan.errorMessage)
+    } else {
+      setLoading(false)
+      router.push('/')
+    }
+    setLoading(false)
+  }
+
+  const modifyLoanRequest = async () => {
+    // TODO:
+    alert('To be implemented')
+  }
+
+  const rejectLoan = async (id) => {
+    if (loading) return
+    setLoading(true)
+    // TODO: Complete this using accept loan func
+    alert('To be implemented')
+    const payload = {
+      id: _id,
+      acceptedBy: session.user._id,
+      status: 'Accepted',
+    }
+
+    // const loan = await updateloan(payload)
+
+    // if (loan.hasError) {
+    //   setMessage(loan.errorMessage)
+    // } else {
+    //   setLoading(false)
+    //   router.push('/')
+    // }
     setLoading(false)
   }
 
@@ -112,8 +166,9 @@ function UserProfileNavigation({ loans }) {
                       <div className="flex space-x-2">
                         {loggedInUser ? (
                           <button
+                            disabled={loading}
                             onClick={() => deleteLoanReq(_id)}
-                            className="rounded-md bg-red-500 p-1 px-3 text-sm uppercase text-white transition-all duration-300 hover:bg-white hover:text-red-500 hover:ring-[1.4px] hover:ring-red-500"
+                            className="rounded-md bg-red-500 p-1 px-3 text-sm uppercase text-white transition-all duration-300 hover:bg-white hover:text-red-500 hover:ring-[1.4px] hover:ring-red-500 disabled:opacity-50"
                           >
                             delete
                           </button>
@@ -130,7 +185,7 @@ function UserProfileNavigation({ loans }) {
                               )}
                               {!(postedBy.userid === session?.user._id) && (
                                 <button
-                                  onClick={() => router.push(`/`)}
+                                  onClick={modifyLoanRequest}
                                   className="rounded-md bg-blue-500 p-1 px-3 text-sm uppercase text-white transition-all duration-300 hover:bg-white hover:text-blue-500 hover:ring-[1.4px] hover:ring-blue-500"
                                 >
                                   Modify
@@ -139,7 +194,7 @@ function UserProfileNavigation({ loans }) {
                               <button
                                 onClick={() =>
                                   postedBy.userid === session?.user._id
-                                    ? deleteLoan(_id)
+                                    ? deleteLoanReq(_id)
                                     : rejectLoan()
                                 }
                                 className="rounded-md bg-red-500 p-1 px-3 text-sm uppercase text-white transition-all duration-300 hover:bg-white hover:text-red-500 hover:ring-[1.4px] hover:ring-red-500"
