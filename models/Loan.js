@@ -33,7 +33,10 @@ const LoanSchema = new mongoose.Schema(
       ref: 'User',
     },
     acceptedBy: {
-      type: ObjectId,
+      userid: {
+        type: String,
+      },
+      username: { type: String },
     },
   },
   {

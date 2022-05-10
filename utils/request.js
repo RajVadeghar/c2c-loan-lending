@@ -107,6 +107,18 @@ export const getLoansByUser = async (id) => {
   }
 }
 
+export const getAcceptedLoanReq = async (id) => {
+  try {
+    const res = await axios.get(`${server}/api/loan/acceptedBy/${id}`)
+    return res.data
+  } catch (error) {
+    const errorMsg = getValue(error, ['response', 'data'])
+    return errorMsg
+  }
+}
+
+
+
 export const getUserClassLinks = async (id) => {
   try {
     const res = await axios.get(`${server}/api/user/classlink/${id}`)

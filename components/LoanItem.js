@@ -1,15 +1,40 @@
 import { useSession } from 'next-auth/react'
 import { useRouter } from 'next/router'
 import React, { useState } from 'react'
+import { useSelector } from 'react-redux'
 import TimeAgo from 'timeago-react'
-import { deleteloan, updateloan } from '../utils/request'
+import { deleteloan, getuser, updateloan } from '../utils/request'
 import { deleteLoanReq } from './UserProfileNavigation'
 
 function LoanItem({ loan }) {
-  const { _id, amount, tenure, interest, postedBy, createdAt, status } = loan
+  const {
+    _id,
+    amount,
+    tenure,
+    interest,
+    postedBy,
+    createdAt,
+    status,
+    acceptedBy,
+  } = loan
   const { data: session } = useSession()
   const [loading, setLoading] = useState(false)
   const router = useRouter()
+
+  const getUser = async (id) => {
+    if (loading) return
+    setLoading(true)
+
+    const acceptedByUser = await getuser(id)
+
+    if (acceptedByUser.hasError) {
+      setMessage(acceptedByUser.errorMessage)
+    } else {
+      console.log(acceptedByUser)
+      setLoading(false)
+    }
+    setLoading(false)
+  }
 
   const acceptLoanRequest = async (id) => {
     if (loading) return
@@ -32,24 +57,30 @@ function LoanItem({ loan }) {
     setLoading(false)
   }
 
+  const modifyLoanRequest = async () => {
+    // TODO:
+    alert('To be implemented')
+  }
+
   const rejectLoan = async (id) => {
     if (loading) return
     setLoading(true)
     // TODO: Complete this using accept loan func
+    alert('To be implemented')
     const payload = {
       id: _id,
       acceptedBy: session.user._id,
       status: 'Accepted',
     }
 
-    const loan = await updateloan(payload)
+    // const loan = await updateloan(payload)
 
-    if (loan.hasError) {
-      setMessage(loan.errorMessage)
-    } else {
-      setLoading(false)
-      router.push('/')
-    }
+    // if (loan.hasError) {
+    //   setMessage(loan.errorMessage)
+    // } else {
+    //   setLoading(false)
+    //   router.push('/')
+    // }
     setLoading(false)
   }
 
@@ -75,7 +106,7 @@ function LoanItem({ loan }) {
         </span>
       ) : (
         <span className="absolute bottom-6 right-6 mr-2 rounded bg-green-600 px-2.5 py-0.5 text-xs font-semibold text-white">
-          accepted
+          accepted by {acceptedBy.username}
         </span>
       )}
 
@@ -127,7 +158,7 @@ function LoanItem({ loan }) {
           )}
           {!(postedBy.userid === session?.user._id) && (
             <button
-              onClick={() => router.push(`/`)}
+              onClick={modifyLoanRequest}
               className="rounded-md bg-blue-500 p-1 px-3 text-sm uppercase text-white transition-all duration-300 hover:bg-white hover:text-blue-500 hover:ring-[1.4px] hover:ring-blue-500"
             >
               Modify

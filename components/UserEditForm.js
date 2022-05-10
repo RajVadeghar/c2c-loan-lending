@@ -36,6 +36,11 @@ function UserEditForm({ updateUser }) {
     dispatch(togglePan())
   }
 
+  const uploadSalSlip = () => {
+    // TODO:
+    alert('To be implemented')
+  }
+
   return (
     <form
       onSubmit={update}
@@ -151,7 +156,10 @@ function UserEditForm({ updateUser }) {
       ) : (
         <div className="w-full">
           <label className="label">Salary Slips:</label>
-          <div className="group grid h-12 w-full cursor-pointer place-items-center rounded-md border-2 bg-slate-50 transition-all hover:shadow-md">
+          <div
+            onClick={uploadSalSlip}
+            className="group grid h-12 w-full cursor-pointer place-items-center rounded-md border-2 bg-slate-50 transition-all hover:shadow-md"
+          >
             <div className="flex items-center gap-x-2">
               <p className="text-xl font-thin">Upload Salary Slips</p>
               <DocumentAddIcon className="h-7 w-7 text-gray-700 group-hover:text-gray-600" />

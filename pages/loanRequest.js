@@ -32,6 +32,7 @@ function LoanRequest() {
     const loanRequest = await requestALoan(payload)
 
     if (loanRequest.hasError) {
+      console.log(loanRequest)
       setErrorMessage(loanRequest.errorMessage)
     } else {
       setErrorMessage('')
@@ -116,4 +117,3 @@ function LoanRequest() {
 }
 
 export default LoanRequest
-
